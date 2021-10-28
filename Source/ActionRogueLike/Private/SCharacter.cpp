@@ -91,7 +91,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("LookUp",this,&ASCharacter::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this,&ASCharacter::PrimaryAttack);
-	PlayerInputComponent->BindAction("PrimaryInteraction",IE_Pressed,this,&ASCharacter::PrimaryInteract);
+	
+	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this,&ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("SecondaryAttack",IE_Pressed,this,&ASCharacter::BlackHoleAttack);
 
 	PlayerInputComponent->BindAction("Sprint",IE_Pressed,this,&ASCharacter::SprintStart);
 	PlayerInputComponent->BindAction("Sprint",IE_Released,this,&ASCharacter::SprintEnd);
@@ -127,8 +129,9 @@ void ASCharacter::PrimaryAttack()
 {
 
 	ActionComponent->StartActionByName(this,"PrimaryAttack");
+
+	//Deprecated
 	//PlayAnimMontage(AttackAnim);
-//
 	//GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack,this,&ASCharacter::PrimaryAttack_TimeElapsed,0.3f);
 	
 
@@ -148,8 +151,8 @@ void ASCharacter::BlackHoleAttack()
 	ActionComponent->StartActionByName(this,"BlackHoleAttack");
 
 }
-
-void ASCharacter::PrimaryAttack_TimeElapsed()
+//Deprecated
+/*void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	//tambien existe check pero es mejor usar ensure o ensureAlways
 	//ensure se activa la primera vez despues de compilar, si vuelve a jugar lo ignora
@@ -184,7 +187,7 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 		DrawDebugLine(GetWorld(),TraceStart,TraceEnd,FColor::Red,false,2.0f);
 	}
 
-}
+}*/
 
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningCompo, float NewHealth,
 	float Delta)

@@ -67,7 +67,7 @@ void ASMagicProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 			
 		}
 	 }*/
-	Explode();
+	//Explode();
 }
 
 void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -75,27 +75,27 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if(OtherActor && OtherActor!= GetInstigator())
 	{
-		// USActionComponent* ActionComponent = Cast<USActionComponent>(OtherActor->GetComponentByClass(USActionComponent::StaticClass()));
-		// if(ActionComponent && ActionComponent->ActiveGameplayTags.HasTag(ParryTag))
-		// {
-		// 	ProjectileMovementComp->Velocity = -ProjectileMovementComp->Velocity;
-		// 	SetInstigator(Cast<APawn>(OtherActor));
-		// 	return;
-		// }
-
-		
-		USAttributeComponent* AttributeComp = USAttributeComponent::GetAttribute(OtherActor);// Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
-		if(AttributeComp)
+		USActionComponent* ActionComponent = Cast<USActionComponent>(OtherActor->GetComponentByClass(USActionComponent::StaticClass()));
+		if(ActionComponent && ActionComponent->ActiveGameplayTags.HasTag(ParryTag))
 		{
-			AttributeComp->ApplyHealthChange(GetInstigator(),-DamageAmount);
-			DrawDebugString(GetWorld(),GetActorLocation(),"HIT",nullptr,FColor::Red,4.0f,true);
-			Explode();
-		
+			ProjectileMovementComp->Velocity = -ProjectileMovementComp->Velocity;
+			SetInstigator(Cast<APawn>(OtherActor));
+			return;
 		}
-		// if(	USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(),OtherActor,DamageAmount,SweepResult))
-		// {
-		// 	Explode();
-		// }
+
+		//Deprecated
+		//USAttributeComponent* AttributeComp = USAttributeComponent::GetAttribute(OtherActor);// Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
+		//if(AttributeComp)
+		//{
+		//	AttributeComp->ApplyHealthChange(GetInstigator(),-DamageAmount);
+		//	DrawDebugString(GetWorld(),GetActorLocation(),"HIT",nullptr,FColor::Red,4.0f,true);
+		//	Explode();
+		//
+		//}
+		 if(USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(),OtherActor,DamageAmount,SweepResult))
+		 {
+		 	Explode();
+		 }
 	}
 
 }

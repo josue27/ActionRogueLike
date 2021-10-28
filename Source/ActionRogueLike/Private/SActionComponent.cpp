@@ -69,6 +69,9 @@ bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 			return  true;
 		}
 	}
+	FString FailedAction = FString::Printf(TEXT("Failed Action name: %s"),*ActionName.ToString());
+	GEngine->AddOnScreenDebugMessage(-1,2.0f,FColor::Red,FailedAction);
+
 	return  false;
 }
 

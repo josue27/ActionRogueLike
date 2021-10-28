@@ -66,8 +66,8 @@ protected:
 	UFUNCTION()
 	void BlackHoleAttack();
 
-	UFUNCTION()
-	void PrimaryAttack_TimeElapsed();
+	//UFUNCTION()
+	//void PrimaryAttack_TimeElapsed();
 	
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningCompo, float NewHealth, float Delta);

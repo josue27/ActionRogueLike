@@ -29,28 +29,28 @@ bool USAttributeComponent::Kill(AActor* InstigatorActor)
 
 bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
-	//if(!GetOwner()->CanBeDamaged())
-	//{
-	//	return  false;
-	//}
-	//if(Delta < 0.0f)
-	//{
-	//	float DeltaMultiplier = CVarDamageMultiplier.GetValueOnGameThread();
-	//	Delta *= DeltaMultiplier;
-	//}
+	if(!GetOwner()->CanBeDamaged())
+	{
+		return  false;
+	}
+	if(Delta < 0.0f)
+	{
+		float DeltaMultiplier = CVarDamageMultiplier.GetValueOnGameThread();
+		Delta *= DeltaMultiplier;
+	}
 	float OldHealth = Health;
 	Health = FMath::Clamp(Health + Delta,0.0f,HealthMax);
 	float ActualDelta = Health - OldHealth;
 	OnHealthChange.Broadcast(InstigatorActor,this,Health,ActualDelta);
-	// if(Health <=0.0f)
-	// {
-	// 	ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>();
-	// 	if(GM)
-	// 	{
-	// 		GM->OnActorKilled(GetOwner(),InstigatorActor);
-	// 	}
-	// }
-	// UE_LOG(LogTemp,Warning,TEXT("%s Hitted, changing health to %f"),*GetNameSafe(GetOwner()),Health);
+	if(Health <=0.0f)
+	{
+		ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>();
+		if(GM)
+		{
+			GM->OnActorKilled(GetOwner(),InstigatorActor);
+		}
+	}
+	UE_LOG(LogTemp,Warning,TEXT("%s Hitted, changing health to %f"),*GetNameSafe(GetOwner()),Health);
 	return  ActualDelta != 0;
 }
 
