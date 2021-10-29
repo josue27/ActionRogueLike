@@ -27,10 +27,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Tags")
 	FGameplayTagContainer BlockTags;
 
-	bool bIsRunning;
+	UPROPERTY()
+	bool bIsRunning = false;
+
 	public:
 	UFUNCTION(BlueprintCallable,Category="Action")
-	bool IsRunning()const;
+	bool IsRunning() const;
 	
 	UPROPERTY(EditDefaultsOnly,Category="Actions")
 	FName ActionName;

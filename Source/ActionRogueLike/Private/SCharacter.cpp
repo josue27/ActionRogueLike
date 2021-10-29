@@ -10,7 +10,7 @@
 #include "SActionComponent.h"
 #include "SAttributeComponent.h"
 #include "SIntercationComponent.h"
-#include "Kismet/KismetMathLibrary.h"
+
 // Sets default values
 ASCharacter::ASCharacter()
 {
@@ -90,7 +90,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("Turn",this,&ASCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp",this,&ASCharacter::AddControllerPitchInput);
 
-	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this,&ASCharacter::PrimaryAttack);
+
 	
 	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this,&ASCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("SecondaryAttack",IE_Pressed,this,&ASCharacter::BlackHoleAttack);
@@ -128,10 +128,11 @@ void ASCharacter::MoveRight(float value)
 void ASCharacter::PrimaryAttack()
 {
 
-	ActionComponent->StartActionByName(this,"PrimaryAttack");
+	ActionComponent->StartActionByName(this, "PrimaryAttack");
+	//ActionComponent->StartActionByName(this,"Sprint");
 
 	//Deprecated
-	//PlayAnimMontage(AttackAnim);
+	//PlayAnimMontage(AttackAnim);	
 	//GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack,this,&ASCharacter::PrimaryAttack_TimeElapsed,0.3f);
 	
 
@@ -208,6 +209,8 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 void ASCharacter::SprintStart()
 {
 	ActionComponent->StartActionByName(this,"Sprint");
+	//ActionComponent->StartActionByName(this, "PrimaryAttack");
+
 }
 
 void ASCharacter::SprintEnd()
