@@ -38,8 +38,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Attack")
 	UAnimMontage* AttackAnim;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Components")
 	USIntercationComponent* InteractionComp;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Components")
+	USIntercationComponent* InteractionCompB;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	USAttributeComponent* AttributeComponent;

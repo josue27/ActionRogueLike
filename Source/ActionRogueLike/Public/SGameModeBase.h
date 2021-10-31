@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SPowerUpActor.h"
 #include "EnvironmentQuery/EnvQueryInstanceBlueprintWrapper.h"
 #include "GameFramework/GameModeBase.h"
 #include "SGameModeBase.generated.h"
@@ -43,4 +44,19 @@ UPROPERTY(EditDefaultsOnly)
 	void KillAll();
 	
 	virtual void OnActorKilled(AActor* VictimActor, AActor* Killer);
+
+	protected:
+
+	UPROPERTY(EditAnywhere,Category="PowerUps")
+	UEnvQuery* PowerupSpawnQuery;
+
+	UPROPERTY(EditAnywhere,Category="PowerUps")
+	TArray<TSubclassOf<ASPowerUpActor>> PowerUpClasses;
+	UPROPERTY(EditAnywhere,Category="PowerUps")
+	int32 DesirePowerUpCount;
+	UPROPERTY(EditAnywhere,Category="PowerUps")
+	float RequiredPowerUpDistance = 100.0f;
+
+	UFUNCTION()
+	void OnPowerUpSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance,EEnvQueryStatus::Type QueryStatus);
 };

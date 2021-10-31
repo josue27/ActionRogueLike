@@ -23,9 +23,66 @@ void ASGameModeBase::StartPlay()
 	Super::StartPlay();
 	GetWorldTimerManager().SetTimer(TimerHandle_SpawnBots,this,&ASGameModeBase::SpawnTimerElapsed,SpawnTimerInterval,true);
 
+	if(ensure(PowerUpClasses.Num()>0))
+	{
+		UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this,PowerupSpawnQuery,this,EEnvQueryRunMode::AllMatching,nullptr);
+		if(ensure(QueryInstance))
+		{
+			QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this,&ASGameModeBase::ASGameModeBase::OnPowerUpSpawnQueryCompleted);
+		}
+	}
+
 }
 
+void ASGameModeBase::OnPowerUpSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance,
+	EEnvQueryStatus::Type QueryStatus)
+{
+	if(QueryStatus != EEnvQueryStatus::Success)
+	{
+		return;
+	}
 
+	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
+
+	//Store ysed locations to check distance between possible locations
+	TArray<FVector> UsedLocations;
+
+	int32 SpawnCounter = 0;
+	while (SpawnCounter<DesirePowerUpCount && Locations.Num() >0)
+	{
+		int32 RandomLocationIndex  = FMath::RandRange(0,Locations.Num()-1);
+		 FVector PickedLocation = Locations[RandomLocationIndex];
+		//Remove from Array
+		Locations.RemoveAt(RandomLocationIndex);
+
+		//chek minimum distance requirement
+		bool bValidLocation = true;
+		for(FVector OtherLocation : UsedLocations)
+		{
+			float DistanceTo = (PickedLocation-OtherLocation).Size();
+			if(DistanceTo < RequiredPowerUpDistance)
+			{
+				//Skip and end forloop
+				bValidLocation = false;
+				break;
+			}
+		}
+		if(!bValidLocation)
+		{
+			//Go batck to the While
+			continue;
+		}
+		//if is a validLocation....
+		int32 RandomClassIndex = FMath::RandRange(0,PowerUpClasses.Num()-1);
+		TSubclassOf<AActor> RandomPowerUpClass = PowerUpClasses[RandomClassIndex];
+		GetWorld()->SpawnActor<AActor>(RandomPowerUpClass,PickedLocation,FRotator::ZeroRotator);
+		
+		//add the new use location so it can be compared
+		UsedLocations.Add(PickedLocation);
+		SpawnCounter++;
+	}
+	
+}
 void ASGameModeBase::SpawnTimerElapsed()
 {
 	if(!CVarSpawnBots.GetValueOnGameThread())
@@ -116,13 +173,15 @@ void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
 		UE_LOG(LogTemp,Log,TEXT("OnActorKilled: %s was killed by %s"),*GetNameSafe(VictimActor),*GetNameSafe(Killer));
 		return;
 	}
+
+	//If you kill a bot
 	ASAICharacter* Bot = Cast<ASAICharacter>(VictimActor);
 	if(Bot)
 	{
 		ASPlayerState* PS = Cast<ASPlayerState>(PlayerStateClass);
 		if(PS)
 		{
-			PS->ChangeCredits(20);
+			PS->AddCredit(20);
 		}
 	}
 }

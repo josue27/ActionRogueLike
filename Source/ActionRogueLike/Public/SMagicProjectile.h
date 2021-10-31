@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "SActionEffect.h"
 #include "SProjectile.h"
 #include "GameFramework/Actor.h"
 #include "SMagicProjectile.generated.h"
@@ -43,5 +44,7 @@ protected:
 	// Sets default values for this actor's properties
 	ASMagicProjectile();	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USActionEffect> BurningActionClass;
 };

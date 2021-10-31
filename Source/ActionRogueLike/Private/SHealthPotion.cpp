@@ -41,10 +41,9 @@ void ASHealthPotion::Interact_Implementation(APawn* InstigatorPawn)
 		AttributeComp->ApplyHealthChange(this,HealthRecovery);
 		HideAndCooldownPowerUp();
 		ASPlayerState* PS = Cast<ASPlayerState>(InstigatorPawn->GetPlayerState());
-		if(PS)
+		if(PS && PS->HasEnoughCredit(ItemCost))
 		{
-			if(PS->HasEnoughCredit(ItemCost))
-				PS->ChangeCredits(-ItemCost);
+				PS->RemoveCredit(ItemCost);
 		}
 		UE_LOG(LogTemp,Warning,TEXT("Health potion taken"));
 

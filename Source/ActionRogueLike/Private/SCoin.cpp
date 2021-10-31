@@ -19,7 +19,7 @@ void ASCoin::Interact_Implementation(APawn* InstigatorPawn)
 		ASPlayerState* PS = Cast<ASPlayerState>(PC->GetPlayerState());
 		if(PS)
 		{
-			PS->ChangeCredits(Value);
+			PS->AddCredit(Value);
 			HideAndCooldownPowerUp();
 
 		}

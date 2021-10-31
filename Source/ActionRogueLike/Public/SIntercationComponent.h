@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SWorldUserWidget.h"
 #include "Components/ActorComponent.h"
 #include "SIntercationComponent.generated.h"
 
@@ -19,6 +20,24 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	void FindBestInteractable();
+
+	UPROPERTY()
+	AActor* FocusedActor;
+
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<USWorldUserWidget> DefaultWidgetClass;
+	UPROPERTY()
+	USWorldUserWidget* DefaultWidgetInstance;
+
+	UPROPERTY(EditAnywhere,Category="Trace")
+	float TraceDistance = 1000.0f;
+	UPROPERTY(EditDefaultsOnly,Category="Trace")
+	float TraceRadius;
+	UPROPERTY(EditDefaultsOnly,Category="Trace")
+	TEnumAsByte<ECollisionChannel> CollisionChannel;
+	//ojo: tenemos que hacer el TEnumAsByte porque esto esta en c++ 8 y no permitiria compilar sin esto, en el c++11 ya deja
 
 public:	
 	// Called every frame
