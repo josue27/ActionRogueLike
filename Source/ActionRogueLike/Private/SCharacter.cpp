@@ -51,7 +51,7 @@ FVector ASCharacter::GetPawnViewLocation() const
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 
@@ -93,6 +93,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	
 	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this,&ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("PrimaryInteraction",IE_Pressed,this,&ASCharacter::PrimaryInteract);
+
 	PlayerInputComponent->BindAction("SecondaryAttack",IE_Pressed,this,&ASCharacter::BlackHoleAttack);
 
 	PlayerInputComponent->BindAction("Sprint",IE_Pressed,this,&ASCharacter::SprintStart);
@@ -196,12 +198,17 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	if(Delta<0.0f)
 	{
 		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit",GetWorld()->TimeSeconds);
+		
     
 	}
 	if(NewHealth <=0.0f && Delta<0.0f)
 	{
 		APlayerController* PC = Cast<APlayerController>(GetController());
 		DisableInput(PC);
+	}
+	if(OwningCompo)
+	{
+		OwningCompo->ApplyRageChange(InstigatorActor,20.0f);
 	}
 	
 }

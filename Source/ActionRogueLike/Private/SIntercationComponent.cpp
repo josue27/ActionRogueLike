@@ -114,7 +114,7 @@ void USIntercationComponent::FindBestInteractable()
  	if(bDrawDebug)
  	{
  		DrawDebugLine(GetWorld(),EyeLocation,End,LineColor,false
-         		,3.0f,0,2.0f);
+         		,0.1f,0,1.0f);
  	}
  	
 }
@@ -124,7 +124,7 @@ void USIntercationComponent::PrimaryInteract()
 	APawn* MyPawn = Cast<APawn>(GetOwner());
 	if(FocusedActor == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1,1.0f,FColor::Yellow,"InteractionComponent: No FocusActor to interact");
+		GEngine->AddOnScreenDebugMessage(-1,2.0f,FColor::Yellow,"InteractionComponent: No FocusActor to interact");
 	}
 	ISGameplayInterface::Execute_Interact(FocusedActor,MyPawn);
 }

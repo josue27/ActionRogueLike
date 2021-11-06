@@ -89,6 +89,16 @@ void ASAICharacter::SetTargetActor(AActor* NewTarget)
 	if(AIC)
 	{
 		AIC->GetBlackboardComponent()->SetValueAsObject("TargetActor",NewTarget);
+		
+		if(ActiveAlertSign == nullptr)
+		{
+			ActiveAlertSign = CreateWidget<USWorldUserWidget>(GetWorld(),AlertWidgetClass);
+			if(ActiveAlertSign)
+			{
+				ActiveAlertSign->AttachedActor= this;
+				ActiveAlertSign->AddToViewport();
+			}
+		}
 	}
 }
 

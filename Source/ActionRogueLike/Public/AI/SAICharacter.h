@@ -25,6 +25,7 @@ public:
 protected:
 
 	USWorldUserWidget* ActiveHealthBar;
+	USWorldUserWidget* ActiveAlertSign;
 	UPROPERTY(VisibleAnywhere,Category="Components")
 	UPawnSensingComponent* PawnSensingComponent;
 
@@ -33,6 +34,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly,Category="UI")
 	TSubclassOf<UUserWidget> HealthBarWidgetClass;
+	UPROPERTY(EditDefaultsOnly,Category="UI")
+	TSubclassOf<UUserWidget> AlertWidgetClass;
 	
 	virtual void PostInitializeComponents() override;
 	UFUNCTION()

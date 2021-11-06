@@ -35,6 +35,8 @@ class ACTIONROGUELIKE_API USAction_ProjectileAttack : public USAction
 	public:
 	virtual void StartAction_Implementation(AActor* Instigator) override;
 
+	UPROPERTY(EditDefaultsOnly,Category="Attack")
+	int32 RageCost;
 	USAction_ProjectileAttack();
 	
 };

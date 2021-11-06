@@ -43,7 +43,7 @@ void USAction::StopAction_Implementation(AActor* Instigator)
 UWorld* USAction::GetWorld() const
 {
 	//EL GetOuter() es valido porque en SActionComponent hay una funcion donde se llama AddAction
-	//Y ashi se crea un objeto donde se pasa a si mismo en "this"
+	//Y asi se crea un objeto donde se pasa a si mismo en "this"
 	//lo hacemos porque puede ser que el objeto no tenga acceso a GetWorld, entonces llama a quien lo llamo y le pide
 	//GetWorld()
 	UActorComponent*Comp = Cast<UActorComponent> (GetOuter());

@@ -54,6 +54,19 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	return  ActualDelta != 0;
 }
 
+bool USAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float DeltaRage)
+{
+	if(!GetOwner()->CanBeDamaged() || DeltaRage ==0.0f)
+	{
+		return  false;
+	}
+
+	Rage = FMath::Clamp(Rage+DeltaRage,0.0f,RageMax);
+	OnRageChange.Broadcast(InstigatorActor,this,Rage,DeltaRage);
+	return true;
+	
+}
+
 bool USAttributeComponent::IsAlive() const
 {
 	return Health > 0.0f;
@@ -67,6 +80,30 @@ float USAttributeComponent::GetCurrentHealth()
 bool USAttributeComponent::IsMaxHealth()
 {
 	return Health >= HealthMax;
+}
+
+float USAttributeComponent::GetCurrentRage()
+{
+	return Rage;
+}
+
+bool USAttributeComponent::HasEnoughRage(float RageCost)
+{
+	if(Rage < 0.0f || Rage - RageCost < 0.0f)
+	{
+		return false;
+	}
+	return  true;
+}
+
+void USAttributeComponent::UseRage(float RageCost)
+{
+	if(Rage < 0.0f || Rage - RageCost < 0.0f)
+	{
+		return;
+	}
+	
+	
 }
 
 USAttributeComponent* USAttributeComponent::GetAttribute(AActor* FromActor)

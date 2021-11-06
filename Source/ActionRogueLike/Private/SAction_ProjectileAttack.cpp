@@ -3,6 +3,7 @@
 
 #include "SAction_ProjectileAttack.h"
 
+#include "SAttributeComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -15,8 +16,15 @@ USAction_ProjectileAttack::USAction_ProjectileAttack()
 
 void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
  {
+	USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(	Instigator->GetComponentByClass(USAttributeComponent::StaticClass()));
+  	if(!AttributeComp->HasEnoughRage(RageCost))
+  	{
+  		GEngine->AddOnScreenDebugMessage(-1,2.0f,FColor::Yellow,"Not enough Rage");
+  		return;
+  	}
+	
  	Super::StartAction_Implementation(Instigator);
-
+		
 	ACharacter* Character = Cast<ACharacter>(Instigator);
 	if(Character)
 	{
@@ -26,6 +34,7 @@ void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
 		FTimerDelegate Delegate;
 		Delegate.BindUFunction(this,"AttackDelay_Elapsed",Character);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttackDelay,Delegate,AttackAnimDelay,false);
+	    AttributeComp->ApplyRageChange(Instigator, -RageCost);
 	}
  }
 
